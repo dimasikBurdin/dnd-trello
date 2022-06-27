@@ -32,6 +32,7 @@
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    color: rgba(105, 105, 105, .5);
     
 }
 
