@@ -1,0 +1,11 @@
+.card {
+    width: 150px;
+    height: 70px;
+    background-color: cornflowerblue;
+    border: 1px dotted yellowgreen;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: aliceblue;
+}
