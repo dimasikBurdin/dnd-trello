@@ -9,12 +9,11 @@ function App() {
   const init = [
     useRef(['1', '2', '3']),
     useRef(Array<string>()),
+    useRef(Array<string>()),
     useRef(Array<string>())
   ]
   const [collumns, setCollumns] = useState<Array<React.MutableRefObject<string[]>>>(init);
-  // const [removeCardInfo, setRemoveCardInfo] = useState<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
   const removeCardInfo = useRef<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
-
   
   function onDropped(card: string, dataList: React.MutableRefObject<string[]>) {
     dataList.current = [...dataList.current, card];
@@ -35,13 +34,8 @@ function App() {
 
   return (
     <div className="App">
-      <DndProvider backend={HTML5Backend}>
-        <div className='left-side'>          
-            <Card value='1' />
-            <Card value='2' />
-            <Card value='3' />          
-        </div>
-        <div className='right-side'>
+      <DndProvider backend={HTML5Backend}>        
+        <div className='board-container'>
           {collumns.map((collumn, i) => {
             return <DropCollumn 
               key={collumn.current.toString()+i}

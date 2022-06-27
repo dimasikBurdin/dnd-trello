@@ -45,13 +45,22 @@ export const DropCollumn:React.FC<TProps> = (props) => {
     }
    
     return <div className="drop-collumn" ref={dropRef} style={canDrop && isOver ? {backgroundColor: 'lightgreen'} : {}}>
-        {canDrop && isOver ? 'drop on me' : ''}        
-        {props.colRef.current.map((card, i) => {
-            return <Card 
-                key={card+i} 
-                value={card} 
-                removeCard={() => removeCard(card, i, props.colRef)}
-            />
-        })}
+        <div className="drop-collumn-header">
+            <span className="drop-collumn-header-title">Title</span>
+        </div>
+        {
+            canDrop && isOver 
+            ? <span className="drop-text">drop on me</span>
+            : ''
+        }
+        <div className="drop-collumn-cards-container">
+            {props.colRef.current.map((card, i) => {
+                return <Card 
+                    key={card+i} 
+                    value={card} 
+                    removeCard={() => removeCard(card, i, props.colRef)}
+                />
+            })}
+        </div>        
     </div>
 }

@@ -1,11 +1,12 @@
 .card {
-    width: 150px;
-    height: 70px;
+    width: 270px;
+    height: 100px;
     background-color: cornflowerblue;
-    border: 1px dotted yellowgreen;
+    border: 2px dotted yellowgreen;
 
     display: flex;
     justify-content: center;
     align-items: center;
     color: aliceblue;
+    border-radius: 10px;
 }
