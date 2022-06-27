@@ -7,14 +7,30 @@ import { DropCollumn } from './components/dropCollumn';
 
 function App() {
   const init = [
-    useRef(Array<string>()),
+    useRef(['1', '2', '3']),
     useRef(Array<string>()),
     useRef(Array<string>())
   ]
   const [collumns, setCollumns] = useState<Array<React.MutableRefObject<string[]>>>(init);
+  // const [removeCardInfo, setRemoveCardInfo] = useState<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
+  const removeCardInfo = useRef<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
+
   
   function onDropped(card: string, dataList: React.MutableRefObject<string[]>) {
     dataList.current = [...dataList.current, card];
+    console.log('add card')
+  }
+
+  function removeCard(card: string, index: number, dataList: React.MutableRefObject<string[]>) {
+    console.log('remove this card')
+    dataList.current?.splice(index, 1)
+  }
+
+  function newRemoveCard() {
+    console.log('remove this card');
+    let dataList = removeCardInfo?.current.dataList;
+    let index = removeCardInfo?.current.ind;    
+    dataList?.current?.splice(index, 1)
   }
 
   return (
@@ -27,7 +43,14 @@ function App() {
         </div>
         <div className='right-side'>
           {collumns.map((collumn, i) => {
-            return <DropCollumn key={collumn.current.toString()+i} onDropped={onDropped} colRef={collumn} />
+            return <DropCollumn 
+              key={collumn.current.toString()+i}
+              onDropped={onDropped}
+              removeCard={removeCard}
+              colRef={collumn}
+              setRemoveCardInfo={removeCardInfo}
+              newRemoveCard={newRemoveCard}
+            />
           })}          
         </div>
       </DndProvider>

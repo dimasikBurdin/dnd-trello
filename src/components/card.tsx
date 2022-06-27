@@ -4,14 +4,17 @@ import './card.css';
 
 type TProps = {
     value: string
+    removeCard?: Function
 }
 
 export const Card:React.FC<TProps> = (props) => {    
     const [{ opacity }, dragRef, isDragging] = useDrag(
         () => ({
-          type: 'card',
+          type: 'card',          
           item() {
-            console.log('start drag', props.value)
+            console.log('start drag', props.value);
+            if(props.removeCard)
+              props.removeCard();
             return {
               card: props.value
             }
