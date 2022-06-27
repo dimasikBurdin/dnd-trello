@@ -1,6 +1,6 @@
 .card {
     width: 270px;
-    height: 100px;
+    min-height: 100px;
     background-color: cornflowerblue;
     border: 2px dotted yellowgreen;
 

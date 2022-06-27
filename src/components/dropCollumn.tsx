@@ -5,6 +5,7 @@ import './drop.css';
 
 type TProps = {
     onDropped: (card: string, dataList: React.MutableRefObject<string[]>) => void
+    addCard: (dataList: React.MutableRefObject<string[]>) => void
     removeCard: (card: string, index: number, dataList: React.MutableRefObject<string[]>) => void
     colRef: React.MutableRefObject<string[]>
     setRemoveCardInfo: React.MutableRefObject<{
@@ -61,6 +62,11 @@ export const DropCollumn:React.FC<TProps> = (props) => {
                     removeCard={() => removeCard(card, i, props.colRef)}
                 />
             })}
-        </div>        
+        </div>
+        <button className="drop-collumn-create-card-button"
+            onClick={() => props.addCard(props.colRef)}
+        >
+            +
+        </button>
     </div>
 }

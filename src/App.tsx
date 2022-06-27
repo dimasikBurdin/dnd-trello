@@ -14,6 +14,7 @@ function App() {
   ]
   const [collumns, setCollumns] = useState<Array<React.MutableRefObject<string[]>>>(init);
   const removeCardInfo = useRef<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
+  const [help, setHelp] = useState(0);
   
   function onDropped(card: string, dataList: React.MutableRefObject<string[]>) {
     dataList.current = [...dataList.current, card];
@@ -32,6 +33,11 @@ function App() {
     dataList?.current?.splice(index, 1)
   }
 
+  function addCard(dataList: React.MutableRefObject<string[]>) {
+    setHelp(help+1)
+    dataList.current = [...dataList.current, 'new card'];
+  }
+
   return (
     <div className="App">
       <DndProvider backend={HTML5Backend}>        
@@ -44,10 +50,11 @@ function App() {
               colRef={collumn}
               setRemoveCardInfo={removeCardInfo}
               newRemoveCard={newRemoveCard}
+              addCard={addCard}
             />
           })}          
         </div>
-      </DndProvider>
+      </DndProvider>      
     </div>
   );
 }
