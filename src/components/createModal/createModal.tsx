@@ -49,6 +49,7 @@ export const CreateModal:React.FC<TProps> = React.memo((props) => {
                         onChange={(e) => props.setTitle(e.target.value)}
                         required
                         value={props.titleValue}
+                        autoComplete={'off'}
                         // placeholder='Title'
                     />                        
                     <TextField 
@@ -59,6 +60,7 @@ export const CreateModal:React.FC<TProps> = React.memo((props) => {
                         size="small"
                         onChange={(e) => props.setDescr(e.target.value)}                        
                         value={props.descrValue}
+                        autoComplete={'off'}
                     />
                     <Box sx={{marginLeft:'auto'}}>
                         <Button size="small" color="warning" onClick={() => props.onCancelCreate()}>Cancel</Button>

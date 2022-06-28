@@ -34,7 +34,7 @@ function App() {
   function onDropped(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
     card.index = dataList.current.length
     dataList.current = [...dataList.current, card];
-    console.log('add card')
+    console.log('add card');
   }
 
   function removeCard(card: TypeCard, index: number, dataList: React.MutableRefObject<TypeCard[]>) {
@@ -98,6 +98,7 @@ function App() {
   function saveChangesCard(dataList: React.MutableRefObject<TypeCard[]>, title: string, description: string, index: number) {
     dataList.current[index].title = title;
     dataList.current[index].description = description;
+    
     closeInfoCardModal();
   }
 

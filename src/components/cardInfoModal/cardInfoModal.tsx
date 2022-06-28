@@ -92,12 +92,14 @@ export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
                     value={title}
                     size={'small'}
                     onChange={e => setTitle(e.target.value)}
+                    autoComplete={'off'}
                 />
                 <TextField 
                     label='Description'
                     value={descr}
                     size={'small'}
                     onChange={e => setDescr(e.target.value)}
+                    autoComplete={'off'}
                 />
                 <Box sx={{marginLeft:'auto'}}>
                     <Button
