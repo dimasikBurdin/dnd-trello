@@ -61,7 +61,6 @@ function App() {
     console.log(dragInd, hoverInd);
     let collumn = dataList.current;
     let moveCard = collumn[dragInd];
-    moveCard.index = hoverInd+1;
     collumn.splice(dragInd, 1);
     collumn.splice(hoverInd, 0, moveCard);
     dataList.current = [...collumn];
