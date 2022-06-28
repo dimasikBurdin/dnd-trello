@@ -1,11 +1,14 @@
 import { Box, Button, Modal, SxProps, TextField } from "@mui/material";
-import React, { useState } from "react";
+import { Container } from "@mui/system";
+import React, { useEffect, useState } from "react";
 
 type TProps = {
     isOpen: boolean
     close: () => void
     title: string
     description: string
+    setTitle: React.Dispatch<React.SetStateAction<string>>
+    setDescr: React.Dispatch<React.SetStateAction<string>>
 }
 
 // const style: SxProps = {
@@ -33,11 +36,24 @@ const style: SxProps = {
     p: 3,
     borderRadius: '10px',
     position: 'relative',
-    gap: '10px'
+    gap: '10px',
+    boxShadow: 24,
 };
 
 export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
     const [deleteQuestModalOpen, setDeleteQuestModalOpen] = useState(false);
+    const [title, setTitle] = useState('');
+    const [descr, setDescr] = useState('');
+
+    useEffect(() => {
+        setTitle(props.title);
+        setDescr(props.description);
+    }, [props])
+
+    function onSaveChanges() {
+        props.setTitle(title);
+        props.setDescr(descr);
+    }
 
     function closeQuestModal() {
 
@@ -60,22 +76,36 @@ export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
                 </Button>
                 <TextField 
                     label='Title'
-                    value={props.title}
+                    value={title}
                     size={'small'}
+                    onChange={e => setTitle(e.target.value)}
                 />
                 <TextField 
                     label='Description'
-                    value={props.description}
+                    value={descr}
                     size={'small'}
+                    onChange={e => setDescr(e.target.value)}
                 />
-                <Button
-                    color="success"
-                    variant="text"
-                    sx={{marginLeft: 'auto'}}
-                    size={'small'}
-                >
-                    Save changes
-                </Button>
+                <Box sx={{marginLeft:'auto'}}>
+                    <Button
+                        color="warning"
+                        variant="text"
+                        // sx={{marginLeft: 'auto'}}
+                        size={'small'}
+                        onClick={() => props.close()}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        color="success"
+                        variant="text"
+                        // sx={{marginLeft: 'auto'}}
+                        size={'small'}
+                        onClick={() => onSaveChanges()}
+                    >
+                        Save changes
+                    </Button>
+                </Box>                
             </Box>
         </Modal>
         <Modal

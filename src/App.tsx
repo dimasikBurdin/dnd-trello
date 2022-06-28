@@ -85,6 +85,8 @@ function closeCreateModal() {
 }
 
 function openCardInfo(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
+  setModalInfoTitle(card.title);
+  setModalInfoDesc(card.description);
   setCardInfoModalOpen(true);
 }
 
@@ -126,6 +128,8 @@ function closeInfoCardModal() {
         close={closeInfoCardModal}
         title={modalInfoTitle}
         description={modalInfoDesc}
+        setTitle={setModalInfoTitle}
+        setDescr={setModalInfoDesc}
       />
     </div>
   );
