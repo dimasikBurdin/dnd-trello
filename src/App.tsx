@@ -38,6 +38,16 @@ function App() {
     dataList.current = [...dataList.current, 'new card'];
   }
 
+  function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<string[]>) {
+    console.log(dragInd, hoverInd);
+    let collumn = dataList.current;
+    let moveCard = collumn[dragInd];
+    collumn.splice(dragInd, 1);
+    collumn.splice(hoverInd, 0, moveCard);
+    dataList.current = [...collumn];
+    setHelp(help+1)
+}
+
   return (
     <div className="App">
       <DndProvider backend={HTML5Backend}>        
@@ -51,6 +61,7 @@ function App() {
               setRemoveCardInfo={removeCardInfo}
               newRemoveCard={newRemoveCard}
               addCard={addCard}
+              moveCard={moveCard}
             />
           })}          
         </div>
