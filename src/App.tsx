@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Card } from './components/card';
+import { Card } from './components/card/card';
 import './App.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DropCollumn } from './components/dropCollumn';
+import { DropCollumn } from './components/dropCollumn/dropCollumn';
+import { CreateModal } from './components/createModal/createModal'; 
 
 function App() {
   const init = [
@@ -15,6 +16,8 @@ function App() {
   const [collumns, setCollumns] = useState<Array<React.MutableRefObject<string[]>>>(init);
   const removeCardInfo = useRef<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
   const [help, setHelp] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [createCollumn, setCreateCollumn] = useState<React.MutableRefObject<string[]>>();
   
   function onDropped(card: string, dataList: React.MutableRefObject<string[]>) {
     dataList.current = [...dataList.current, card];
@@ -36,6 +39,9 @@ function App() {
   function addCard(dataList: React.MutableRefObject<string[]>) {
     setHelp(help+1)
     dataList.current = [...dataList.current, 'new card'];
+
+    setCreateCollumn(null);
+    closeModal();
   }
 
   function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<string[]>) {
@@ -46,6 +52,16 @@ function App() {
     collumn.splice(hoverInd, 0, moveCard);
     dataList.current = [...collumn];
     setHelp(help+1)
+}
+
+function onClickCreateCard(dataList: React.MutableRefObject<string[]>) {
+  setModalOpen(true);
+  setCreateCollumn(dataList);
+}
+
+function closeModal() {
+  setModalOpen(false);
+  setCreateCollumn(null);
 }
 
   return (
@@ -60,12 +76,19 @@ function App() {
               colRef={collumn}
               setRemoveCardInfo={removeCardInfo}
               newRemoveCard={newRemoveCard}
-              addCard={addCard}
+              // addCard={addCard}
+              addCard={onClickCreateCard}
               moveCard={moveCard}
             />
           })}          
         </div>
-      </DndProvider>      
+      </DndProvider>
+      <CreateModal 
+        isOpen={modalOpen}
+        close={closeModal}
+        onCreateCard={() => addCard(createCollumn)}
+        onCancelCreate={closeModal}
+      />
     </div>
   );
 }

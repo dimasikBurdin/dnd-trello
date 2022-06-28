@@ -1,6 +1,6 @@
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
-import { Card } from "./card";
+import { Card } from "../card/card";
 import './drop.css';
 
 type TProps = {
@@ -21,14 +21,14 @@ interface CardInfo {
     value: string
     index: number
     id: number
-  }
+}
 
 export const DropCollumn:React.FC<TProps> = (props) => {
     // const [cards, setCards] = useState(Array<string>());
     // const cardsRef = useRef(Array<string>());
 
     const [removeCardInfo, setRemoveCardInfo] = useState<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
-
+        
     const [{ isOver, canDrop}, dropRef] = useDrop(() => ({
             accept: 'card',            
             drop: (e: CardInfo) => {                
