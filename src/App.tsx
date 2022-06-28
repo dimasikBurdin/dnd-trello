@@ -24,6 +24,7 @@ function App() {
   const [modalDesc, setModalDesc] = useState<string>('');
   
   function onDropped(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
+    card.index = dataList.current.length
     dataList.current = [...dataList.current, card];
     console.log('add card')
   }
@@ -47,6 +48,8 @@ function App() {
       index: dataList.current.length
     };
 
+    console.log(newCard.index)
+
     dataList.current = [...dataList.current, newCard];
     
     setHelp(help+1)
@@ -58,6 +61,7 @@ function App() {
     console.log(dragInd, hoverInd);
     let collumn = dataList.current;
     let moveCard = collumn[dragInd];
+    moveCard.index = hoverInd+1;
     collumn.splice(dragInd, 1);
     collumn.splice(hoverInd, 0, moveCard);
     dataList.current = [...collumn];

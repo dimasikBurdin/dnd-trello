@@ -88,7 +88,7 @@ export const Card:React.FC<TProps> = (props) => {
       },
     })
     dragRef(drop(ref))
-    return <Paper>
+    return <Paper elevation={6} >
       <div className="card" ref={ref} style={{opacity: opacity}}>
         <div className="card-title-container">
           <span className="card-title">{props.cardInfo.title}</span>
