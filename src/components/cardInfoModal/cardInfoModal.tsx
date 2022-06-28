@@ -128,7 +128,7 @@ export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
             onClose={() => closeQuestModal()}
             sx={{display:'flex', alignItems: 'center', justifyContent: 'center'}}
         >
-            <Box sx={style}>
+            <Box sx={{...style, width: '300px'}}>
                 <Typography id="modal-modal-title" variant="h6" component="h2" textAlign={"center"}>
                     Do you want to remove this card?
                 </Typography>
