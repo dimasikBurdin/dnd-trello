@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Container, Modal, SxProps, TextField, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Container, FormControl, Input, Modal, SxProps, TextField, Typography } from "@mui/material";
 import { CSSProperties } from "@mui/material/styles/createTypography";
 import React, { useState } from "react";
 import './createModal.css';
@@ -8,6 +8,10 @@ type TProps = {
     close: () => void
     onCreateCard: () => void
     onCancelCreate: () => void
+    titleValue: string
+    descrValue: string
+    setTitle: React.Dispatch<React.SetStateAction<string>>
+    setDescr: React.Dispatch<React.SetStateAction<string>>
 }
 
 const style: SxProps = {
@@ -17,7 +21,7 @@ const style: SxProps = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    // border: '2px solid #000',
     boxShadow: 24,
     p: 3,
     borderRadius: '10px',
@@ -32,17 +36,44 @@ export const CreateModal:React.FC<TProps> = React.memo((props) => {
             open={props.isOpen}
             onClose={() => props.close()}
         >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2" textAlign={"center"}>
-                    Create card
-                </Typography>
-                <TextField id="modal-input-title" label='Title' variant="filled" size="small"></TextField>
-                <TextField id="modal-input-description" label='Description' variant="filled" size="small"></TextField>
-                <Box sx={{marginLeft:'auto'}}>
-                    <Button size="small" color="warning" onClick={() => props.onCancelCreate()}>Cancel</Button>
-                    <Button size="small" color="success" onClick={() => props.onCreateCard()}>Create Card</Button>
-                </Box>                    
-            </Box>
+            <form id="form-create-card" onSubmit={() => props.onCreateCard()}>
+                <Container sx={style}  >
+                    <Typography id="modal-modal-title" variant="h6" component="h2" textAlign={"center"}>
+                        Create card
+                    </Typography>
+                    <Input 
+                        id="modal-input-title" 
+                        // label='Title' 
+                        // variant="filled" 
+                        // size="small" 
+                        onChange={(e) => props.setTitle(e.target.value)}
+                        required
+                        value={props.titleValue}
+                        placeholder='Title'
+                    />                        
+                    <Input 
+                        id="modal-input-description" 
+                        // label='Description' 
+                        // variant="filled" 
+                        placeholder="Description"
+                        size="small"
+                        onChange={(e) => props.setDescr(e.target.value)}
+                        required
+                        value={props.descrValue}
+                    />
+                    <Box sx={{marginLeft:'auto'}}>
+                        <Button size="small" color="warning" onClick={() => props.onCancelCreate()}>Cancel</Button>
+                        <Button 
+                            type="submit" 
+                            size="small" 
+                            color="success" 
+                            // onClick={() => props.onCreateCard()}
+                        >
+                            Create Card
+                        </Button>
+                    </Box>                    
+                </Container>
+            </form>
         </Modal>
     </div>
 })

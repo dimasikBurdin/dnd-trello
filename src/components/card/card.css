@@ -5,8 +5,25 @@
     border: 2px dotted yellowgreen;
 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* align-items: center; */
     color: aliceblue;
     border-radius: 10px;
+    /* padding: 10px; */
+}
+
+.card-title-container {
+    /* width: 100%; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 18px;
+    padding: 10px;    
+}
+
+.card-description {
+    padding: 0 15px 15px;
+    word-wrap: break-word;
+    color: antiquewhite;
 }

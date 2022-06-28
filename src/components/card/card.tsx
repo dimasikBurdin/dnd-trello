@@ -2,11 +2,11 @@ import React, { useRef } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
 import './card.css';
 import type { Identifier } from 'dnd-core'; 
+import { TypeCard } from "../../types/card";
 
 type TProps = {
-    value: string
+    cardInfo: TypeCard
     removeCard?: Function
-    index: number
     moveCard: Function
 }
 
@@ -21,13 +21,10 @@ export const Card:React.FC<TProps> = (props) => {
         () => ({
           type: 'card',          
           item() {
-            console.log('start drag', props.value);
+            // console.log('start drag', props.value);
             if(props.removeCard)
-              props.removeCard();
-            return {
-              value: props.value,
-              index: props.index
-            }
+              props.removeCard();            
+            return props.cardInfo
           },
           
           // end: (item, monitor) => {
@@ -44,7 +41,7 @@ export const Card:React.FC<TProps> = (props) => {
     
     const ref = useRef<HTMLDivElement>(null)
     const [{ handlerId }, drop] = useDrop<
-        CardInfo,
+        TypeCard,
         void,
         {handlerId: Identifier | null}
     >({
@@ -54,12 +51,12 @@ export const Card:React.FC<TProps> = (props) => {
           handlerId: monitor.getHandlerId(),
         }
       },
-      hover(item: CardInfo, monitor) {
+      hover(item: TypeCard, monitor) {
         // if (!ref.current) {
         //   return
         // }
         const dragIndex = item.index
-        const hoverIndex = props.index
+        const hoverIndex = props.cardInfo.index
 
         // if (dragIndex === hoverIndex) {
         //   return
@@ -91,6 +88,9 @@ export const Card:React.FC<TProps> = (props) => {
     })
     dragRef(drop(ref))
     return <div className="card" ref={ref} style={{opacity: opacity}}>
-        {props.value}
+      <div className="card-title-container">
+        <span className="card-title">{props.cardInfo.title}</span>
+      </div>      
+      <span className="card-description">{props.cardInfo.description}</span>
     </div>
 }

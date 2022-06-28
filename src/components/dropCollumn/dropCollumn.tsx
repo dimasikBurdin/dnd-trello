@@ -1,18 +1,19 @@
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
+import { TypeCard } from "../../types/card";
 import { Card } from "../card/card";
 import './drop.css';
 
 type TProps = {
-    onDropped: (card: string, dataList: React.MutableRefObject<string[]>) => void
-    addCard: (dataList: React.MutableRefObject<string[]>) => void
+    onDropped: (card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) => void
+    addCard: (dataList: React.MutableRefObject<TypeCard[]>) => void
     moveCard: Function
-    removeCard: (card: string, index: number, dataList: React.MutableRefObject<string[]>) => void
-    colRef: React.MutableRefObject<string[]>
+    removeCard: (card: TypeCard, index: number, dataList: React.MutableRefObject<TypeCard[]>) => void
+    colRef: React.MutableRefObject<TypeCard[]>
     setRemoveCardInfo: React.MutableRefObject<{
-        card: string;
+        card: TypeCard;
         ind: number;
-        dataList: React.MutableRefObject<string[]>;
+        dataList: React.MutableRefObject<TypeCard[]>;
     }>
     newRemoveCard: Function
 }
@@ -27,14 +28,14 @@ export const DropCollumn:React.FC<TProps> = (props) => {
     // const [cards, setCards] = useState(Array<string>());
     // const cardsRef = useRef(Array<string>());
 
-    const [removeCardInfo, setRemoveCardInfo] = useState<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
+    const [removeCardInfo, setRemoveCardInfo] = useState<{card: string, ind: number, dataList: React.MutableRefObject<TypeCard[]>}>();
         
     const [{ isOver, canDrop}, dropRef] = useDrop(() => ({
             accept: 'card',            
-            drop: (e: CardInfo) => {                
+            drop: (e: TypeCard) => {                
                 // props.removeCard(removeCardInfo?.card, removeCardInfo?.ind, removeCardInfo?.dataList)
                 if(props.colRef !== props.setRemoveCardInfo.current.dataList) {
-                    props.onDropped(e.value, props.colRef);
+                    props.onDropped(e, props.colRef);
                     props.newRemoveCard();
                 }                
             },
@@ -46,13 +47,13 @@ export const DropCollumn:React.FC<TProps> = (props) => {
         })
     )
 
-    function removeCard(card: string, ind: number, dataList: React.MutableRefObject<string[]>) {
+    function removeCard(card: TypeCard, ind: number, dataList: React.MutableRefObject<TypeCard[]>) {
         // setRemoveCardInfo({card: card, ind: ind, dataList: dataList});
         // props.setRemoveCardInfo({card: card, ind: ind, dataList: dataList});
         props.setRemoveCardInfo.current = {card: card, ind: ind, dataList: dataList};
     }
 
-    function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<string[]>) {
+    function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<TypeCard[]>) {
         // console.log(dragInd, hoverInd);
         // let collumn = dataList.current;
         // let moveCard = collumn[dragInd];
@@ -76,11 +77,10 @@ export const DropCollumn:React.FC<TProps> = (props) => {
         <div className="drop-collumn-cards-container">
             {props.colRef.current.map((card, i) => {
                 return <Card 
-                    key={card+i} 
-                    value={card} 
+                    key={card.title+i} 
                     removeCard={() => removeCard(card, i, props.colRef)}
-                    index={i}
                     moveCard={(dragInd: number, hoverInd: number) => moveCard(dragInd, hoverInd, props.colRef)}
+                    cardInfo={card}
                 />
             })}
         </div>

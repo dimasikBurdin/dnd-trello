@@ -4,27 +4,31 @@ import './App.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DropCollumn } from './components/dropCollumn/dropCollumn';
-import { CreateModal } from './components/createModal/createModal'; 
+import { CreateModal } from './components/createModal/createModal';
+import { TypeCard } from './types/card';
 
 function App() {
   const init = [
-    useRef(['1', '2', '3']),
-    useRef(Array<string>()),
-    useRef(Array<string>()),
-    useRef(Array<string>())
+    useRef(Array<TypeCard>()),
+    useRef(Array<TypeCard>()),
+    useRef(Array<TypeCard>()),
+    useRef(Array<TypeCard>())
   ]
-  const [collumns, setCollumns] = useState<Array<React.MutableRefObject<string[]>>>(init);
-  const removeCardInfo = useRef<{card: string, ind: number, dataList: React.MutableRefObject<string[]>}>();
+  const [collumns, setCollumns] = useState<Array<React.MutableRefObject<TypeCard[]>>>(init);
+  const removeCardInfo = useRef<{card: TypeCard, ind: number, dataList: React.MutableRefObject<TypeCard[]>}>();
   const [help, setHelp] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
-  const [createCollumn, setCreateCollumn] = useState<React.MutableRefObject<string[]>>();
+  const [createCollumn, setCreateCollumn] = useState<React.MutableRefObject<TypeCard[]>>();
+
+  const [modalTitle, setModalTitle] = useState<string>('');
+  const [modalDesc, setModalDesc] = useState<string>('');
   
-  function onDropped(card: string, dataList: React.MutableRefObject<string[]>) {
+  function onDropped(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
     dataList.current = [...dataList.current, card];
     console.log('add card')
   }
 
-  function removeCard(card: string, index: number, dataList: React.MutableRefObject<string[]>) {
+  function removeCard(card: TypeCard, index: number, dataList: React.MutableRefObject<TypeCard[]>) {
     console.log('remove this card')
     dataList.current?.splice(index, 1)
   }
@@ -36,15 +40,21 @@ function App() {
     dataList?.current?.splice(index, 1)
   }
 
-  function addCard(dataList: React.MutableRefObject<string[]>) {
-    setHelp(help+1)
-    dataList.current = [...dataList.current, 'new card'];
+  function addCard(dataList: React.MutableRefObject<TypeCard[]>) {
+    let newCard: TypeCard = {
+      title: modalTitle,
+      description: modalDesc,
+      index: dataList.current.length
+    };
 
+    dataList.current = [...dataList.current, newCard];
+    
+    setHelp(help+1)
     setCreateCollumn(null);
     closeModal();
   }
 
-  function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<string[]>) {
+  function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<TypeCard[]>) {
     console.log(dragInd, hoverInd);
     let collumn = dataList.current;
     let moveCard = collumn[dragInd];
@@ -54,7 +64,7 @@ function App() {
     setHelp(help+1)
 }
 
-function onClickCreateCard(dataList: React.MutableRefObject<string[]>) {
+function onClickCreateCard(dataList: React.MutableRefObject<TypeCard[]>) {
   setModalOpen(true);
   setCreateCollumn(dataList);
 }
@@ -62,6 +72,8 @@ function onClickCreateCard(dataList: React.MutableRefObject<string[]>) {
 function closeModal() {
   setModalOpen(false);
   setCreateCollumn(null);
+  setModalTitle('');
+  setModalDesc('');
 }
 
   return (
@@ -88,6 +100,10 @@ function closeModal() {
         close={closeModal}
         onCreateCard={() => addCard(createCollumn)}
         onCancelCreate={closeModal}
+        descrValue={modalDesc}
+        titleValue={modalTitle}
+        setDescr={setModalDesc}
+        setTitle={setModalTitle}
       />
     </div>
   );
