@@ -89,7 +89,7 @@ export const Card:React.FC<TProps> = (props) => {
       },
     })
     dragRef(drop(ref))
-    return <Paper elevation={6}>
+    return <Paper elevation={6} sx={{borderRadius:'10px'}}>
       <div className="card" ref={ref} style={{opacity: opacity}} onClick={() => props.onClickCard()}>
         <div className="card-title-container">
           <span className="card-title">{props.cardInfo.title}</span>

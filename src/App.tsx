@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card } from './components/card/card';
 import './App.css';
 import { DndProvider } from 'react-dnd';
@@ -27,6 +27,9 @@ function App() {
 
   const [modalInfoTitle, setModalInfoTitle] = useState<string>('');
   const [modalInfoDesc, setModalInfoDesc] = useState<string>('');
+
+  const currentOpenCollumn = useRef<Array<TypeCard>>();
+  const [currentIndex, setCurrentIndex] = useState<number>(null);
   
   function onDropped(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
     card.index = dataList.current.length
@@ -70,28 +73,38 @@ function App() {
     collumn.splice(hoverInd, 0, moveCard);
     dataList.current = [...collumn];
     setHelp(help+1)
-}
+  }
 
-function onClickCreateCard(dataList: React.MutableRefObject<TypeCard[]>) {
-  setModalCreateOpen(true);
-  setCreateCollumn(dataList);
-}
+  function onClickCreateCard(dataList: React.MutableRefObject<TypeCard[]>) {
+    setModalCreateOpen(true);
+    setCreateCollumn(dataList);
+  }
 
-function closeCreateModal() {
-  setModalCreateOpen(false);
-  setCreateCollumn(null);
-  setModalCreateTitle('');
-  setModalCreateDesc('');
-}
+  function closeCreateModal() {
+    setModalCreateOpen(false);
+    setCreateCollumn(null);
+    setModalCreateTitle('');
+    setModalCreateDesc('');
+  }
 
-function openCardInfo(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
-  setModalInfoTitle(card.title);
-  setModalInfoDesc(card.description);
-  setCardInfoModalOpen(true);
-}
+  function openCardInfo(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>, index: number) {  
+    setModalInfoTitle(card.title);
+    setModalInfoDesc(card.description);
+    setCardInfoModalOpen(true);
+    setCurrentIndex(index);
+    currentOpenCollumn.current = dataList.current;
+  }
+
+  function saveChangesCard(dataList: React.MutableRefObject<TypeCard[]>, title: string, description: string, index: number) {
+    dataList.current[index].title = title;
+    dataList.current[index].description = description;
+    closeInfoCardModal();
+  }
 
 function closeInfoCardModal() {
   setCardInfoModalOpen(false);
+  setModalInfoTitle('');
+  setModalInfoDesc('');
 }
 
   return (
@@ -130,6 +143,7 @@ function closeInfoCardModal() {
         description={modalInfoDesc}
         setTitle={setModalInfoTitle}
         setDescr={setModalInfoDesc}
+        saveChanges={(title: string, description: string) => saveChangesCard(currentOpenCollumn, title, description, currentIndex)}
       />
     </div>
   );

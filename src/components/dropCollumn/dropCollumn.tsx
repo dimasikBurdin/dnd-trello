@@ -63,7 +63,7 @@ export const DropCollumn:React.FC<TProps> = (props) => {
                     removeCard={() => removeCard(card, i, props.colRef)}
                     moveCard={(dragInd: number, hoverInd: number) => moveCard(dragInd, hoverInd, props.colRef)}
                     cardInfo={{...card, index:i}}
-                    onClickCard={() => props.onClickCard(card, props.colRef)}
+                    onClickCard={() => props.onClickCard(card, props.colRef, i)}
                 />
             })}
         </div>

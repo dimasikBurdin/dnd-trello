@@ -9,6 +9,7 @@ type TProps = {
     description: string
     setTitle: React.Dispatch<React.SetStateAction<string>>
     setDescr: React.Dispatch<React.SetStateAction<string>>
+    saveChanges: (title: string, description: string) => void
 }
 
 // const style: SxProps = {
@@ -51,8 +52,9 @@ export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
     }, [props])
 
     function onSaveChanges() {
-        props.setTitle(title);
-        props.setDescr(descr);
+        // props.setTitle(title);
+        // props.setDescr(descr);
+        props.saveChanges(title, descr)
     }
 
     function closeQuestModal() {
