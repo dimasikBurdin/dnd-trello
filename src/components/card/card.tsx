@@ -3,6 +3,7 @@ import { useDrag, useDrop, XYCoord } from "react-dnd";
 import './card.css';
 import type { Identifier } from 'dnd-core'; 
 import { TypeCard } from "../../types/card";
+import { Paper } from "@mui/material";
 
 type TProps = {
     cardInfo: TypeCard
@@ -87,10 +88,13 @@ export const Card:React.FC<TProps> = (props) => {
       },
     })
     dragRef(drop(ref))
-    return <div className="card" ref={ref} style={{opacity: opacity}}>
-      <div className="card-title-container">
-        <span className="card-title">{props.cardInfo.title}</span>
-      </div>      
-      <span className="card-description">{props.cardInfo.description}</span>
+    return <Paper>
+      <div className="card" ref={ref} style={{opacity: opacity}}>
+        <div className="card-title-container">
+          <span className="card-title">{props.cardInfo.title}</span>
+        </div>      
+        <span className="card-description">{props.cardInfo.description}</span>
     </div>
+    </Paper>
+    
 }

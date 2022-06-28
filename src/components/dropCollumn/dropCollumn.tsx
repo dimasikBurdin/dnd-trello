@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { TypeCard } from "../../types/card";
@@ -84,10 +85,19 @@ export const DropCollumn:React.FC<TProps> = (props) => {
                 />
             })}
         </div>
-        <button className="drop-collumn-create-card-button"
+        <Button
+            variant="contained"
+            color="inherit"
+            size="small"
+            sx={{fontSize: '18px'}}
             onClick={() => props.addCard(props.colRef)}
         >
             +
-        </button>
+        </Button>
+        {/* <button className="drop-collumn-create-card-button"
+            onClick={() => props.addCard(props.colRef)}
+        >
+            +
+        </button> */}
     </div>
 }

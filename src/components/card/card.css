@@ -1,14 +1,15 @@
 .card {
     width: 270px;
     min-height: 100px;
-    background-color: cornflowerblue;
-    border: 2px dotted yellowgreen;
+    /* background-color: cornflowerblue;
+    border: 2px dotted yellowgreen; */
 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     /* align-items: center; */
     color: aliceblue;
+    color: black;
     border-radius: 10px;
     /* padding: 10px; */
 }
@@ -26,4 +27,5 @@
     padding: 0 15px 15px;
     word-wrap: break-word;
     color: antiquewhite;
+    color: gray;
 }
