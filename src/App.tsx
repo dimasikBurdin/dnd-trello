@@ -6,6 +6,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DropCollumn } from './components/dropCollumn/dropCollumn';
 import { CreateModal } from './components/createModal/createModal';
 import { TypeCard } from './types/card';
+import { CardInfoModal } from './components/cardInfoModal/cardInfoModal';
 
 function App() {
   const init = [
@@ -17,11 +18,15 @@ function App() {
   const [collumns, setCollumns] = useState<Array<React.MutableRefObject<TypeCard[]>>>(init);
   const removeCardInfo = useRef<{card: TypeCard, ind: number, dataList: React.MutableRefObject<TypeCard[]>}>();
   const [help, setHelp] = useState(0);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalCreateOpen, setModalCreateOpen] = useState(false);
   const [createCollumn, setCreateCollumn] = useState<React.MutableRefObject<TypeCard[]>>();
+  const [cardInfoModalOpen, setCardInfoModalOpen] = useState(false);
 
-  const [modalTitle, setModalTitle] = useState<string>('');
-  const [modalDesc, setModalDesc] = useState<string>('');
+  const [modalCreateTitle, setModalCreateTitle] = useState<string>('');
+  const [modalCreateDesc, setModalCreateDesc] = useState<string>('');
+
+  const [modalInfoTitle, setModalInfoTitle] = useState<string>('');
+  const [modalInfoDesc, setModalInfoDesc] = useState<string>('');
   
   function onDropped(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
     card.index = dataList.current.length
@@ -43,8 +48,8 @@ function App() {
 
   function addCard(dataList: React.MutableRefObject<TypeCard[]>) {
     let newCard: TypeCard = {
-      title: modalTitle,
-      description: modalDesc,
+      title: modalCreateTitle,
+      description: modalCreateDesc,
       index: dataList.current.length
     };
 
@@ -54,7 +59,7 @@ function App() {
     
     setHelp(help+1)
     setCreateCollumn(null);
-    closeModal();
+    closeCreateModal();
   }
 
   function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<TypeCard[]>) {
@@ -68,15 +73,23 @@ function App() {
 }
 
 function onClickCreateCard(dataList: React.MutableRefObject<TypeCard[]>) {
-  setModalOpen(true);
+  setModalCreateOpen(true);
   setCreateCollumn(dataList);
 }
 
-function closeModal() {
-  setModalOpen(false);
+function closeCreateModal() {
+  setModalCreateOpen(false);
   setCreateCollumn(null);
-  setModalTitle('');
-  setModalDesc('');
+  setModalCreateTitle('');
+  setModalCreateDesc('');
+}
+
+function openCardInfo(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
+  setCardInfoModalOpen(true);
+}
+
+function closeInfoCardModal() {
+  setCardInfoModalOpen(false);
 }
 
   return (
@@ -91,22 +104,28 @@ function closeModal() {
               colRef={collumn}
               setRemoveCardInfo={removeCardInfo}
               newRemoveCard={newRemoveCard}
-              // addCard={addCard}
               addCard={onClickCreateCard}
               moveCard={moveCard}
+              onClickCard={openCardInfo}
             />
           })}          
         </div>
       </DndProvider>
       <CreateModal 
-        isOpen={modalOpen}
-        close={closeModal}
+        isOpen={modalCreateOpen}
+        close={closeCreateModal}
         onCreateCard={() => addCard(createCollumn)}
-        onCancelCreate={closeModal}
-        descrValue={modalDesc}
-        titleValue={modalTitle}
-        setDescr={setModalDesc}
-        setTitle={setModalTitle}
+        onCancelCreate={closeCreateModal}
+        descrValue={modalCreateDesc}
+        titleValue={modalCreateTitle}
+        setDescr={setModalCreateDesc}
+        setTitle={setModalCreateTitle}
+      />
+      <CardInfoModal 
+        isOpen={cardInfoModalOpen}
+        close={closeInfoCardModal}
+        title={modalInfoTitle}
+        description={modalInfoDesc}
       />
     </div>
   );

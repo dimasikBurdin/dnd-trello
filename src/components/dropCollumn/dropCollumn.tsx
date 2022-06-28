@@ -17,24 +17,15 @@ type TProps = {
         dataList: React.MutableRefObject<TypeCard[]>;
     }>
     newRemoveCard: Function
-}
-
-interface CardInfo {
-    value: string
-    index: number
-    id: number
+    onClickCard: Function
 }
 
 export const DropCollumn:React.FC<TProps> = (props) => {
-    // const [cards, setCards] = useState(Array<string>());
-    // const cardsRef = useRef(Array<string>());
-
     const [removeCardInfo, setRemoveCardInfo] = useState<{card: string, ind: number, dataList: React.MutableRefObject<TypeCard[]>}>();
         
     const [{ isOver, canDrop}, dropRef] = useDrop(() => ({
             accept: 'card',            
             drop: (e: TypeCard) => {                
-                // props.removeCard(removeCardInfo?.card, removeCardInfo?.ind, removeCardInfo?.dataList)
                 if(props.colRef !== props.setRemoveCardInfo.current.dataList) {
                     props.onDropped(e, props.colRef);
                     props.newRemoveCard();
@@ -48,21 +39,11 @@ export const DropCollumn:React.FC<TProps> = (props) => {
         })
     )
 
-    function removeCard(card: TypeCard, ind: number, dataList: React.MutableRefObject<TypeCard[]>) {
-        // setRemoveCardInfo({card: card, ind: ind, dataList: dataList});
-        // props.setRemoveCardInfo({card: card, ind: ind, dataList: dataList});
+    function removeCard(card: TypeCard, ind: number, dataList: React.MutableRefObject<TypeCard[]>) {        
         props.setRemoveCardInfo.current = {card: card, ind: ind, dataList: dataList};
     }
 
     function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<TypeCard[]>) {
-        // console.log(dragInd, hoverInd);
-        // let collumn = dataList.current;
-        // let moveCard = collumn[dragInd];
-        // collumn.splice(dragInd, 1);
-        // collumn.splice(hoverInd, 0, moveCard);
-        // dataList.current = [...collumn];
-        // return
-
         props.moveCard(dragInd, hoverInd, props.colRef);
     }
    
@@ -82,6 +63,7 @@ export const DropCollumn:React.FC<TProps> = (props) => {
                     removeCard={() => removeCard(card, i, props.colRef)}
                     moveCard={(dragInd: number, hoverInd: number) => moveCard(dragInd, hoverInd, props.colRef)}
                     cardInfo={{...card, index:i}}
+                    onClickCard={() => props.onClickCard(card, props.colRef)}
                 />
             })}
         </div>
@@ -93,11 +75,6 @@ export const DropCollumn:React.FC<TProps> = (props) => {
             onClick={() => props.addCard(props.colRef)}
         >
             +
-        </Button>
-        {/* <button className="drop-collumn-create-card-button"
-            onClick={() => props.addCard(props.colRef)}
-        >
-            +
-        </button> */}
+        </Button>        
     </div>
 }

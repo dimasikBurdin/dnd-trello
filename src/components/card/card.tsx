@@ -9,6 +9,7 @@ type TProps = {
     cardInfo: TypeCard
     removeCard?: Function
     moveCard: Function
+    onClickCard: Function
 }
 
 interface CardInfo {
@@ -88,8 +89,8 @@ export const Card:React.FC<TProps> = (props) => {
       },
     })
     dragRef(drop(ref))
-    return <Paper elevation={6} >
-      <div className="card" ref={ref} style={{opacity: opacity}}>
+    return <Paper elevation={6}>
+      <div className="card" ref={ref} style={{opacity: opacity}} onClick={() => props.onClickCard()}>
         <div className="card-title-container">
           <span className="card-title">{props.cardInfo.title}</span>
         </div>      

@@ -41,24 +41,23 @@ export const CreateModal:React.FC<TProps> = React.memo((props) => {
                     <Typography id="modal-modal-title" variant="h6" component="h2" textAlign={"center"}>
                         Create card
                     </Typography>
-                    <Input 
+                    <TextField 
                         id="modal-input-title" 
-                        // label='Title' 
-                        // variant="filled" 
-                        // size="small" 
+                        label='Title' 
+                        variant="filled" 
+                        size="small" 
                         onChange={(e) => props.setTitle(e.target.value)}
                         required
                         value={props.titleValue}
-                        placeholder='Title'
+                        // placeholder='Title'
                     />                        
-                    <Input 
+                    <TextField 
                         id="modal-input-description" 
-                        // label='Description' 
-                        // variant="filled" 
-                        placeholder="Description"
+                        label='Description' 
+                        variant="filled" 
+                        // placeholder="Description"
                         size="small"
-                        onChange={(e) => props.setDescr(e.target.value)}
-                        required
+                        onChange={(e) => props.setDescr(e.target.value)}                        
                         value={props.descrValue}
                     />
                     <Box sx={{marginLeft:'auto'}}>
