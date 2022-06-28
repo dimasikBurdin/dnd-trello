@@ -1,6 +1,14 @@
+body {
+  /* height: 100vh;  */
+}
+
 .App {
   display: flex;
+  
   height: 100vh;
+  position: relative;
+  overflow-y: hidden;
+  
 }
 
 .board-container {
