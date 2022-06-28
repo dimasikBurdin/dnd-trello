@@ -101,11 +101,18 @@ function App() {
     closeInfoCardModal();
   }
 
-function closeInfoCardModal() {
-  setCardInfoModalOpen(false);
-  setModalInfoTitle('');
-  setModalInfoDesc('');
-}
+  function deleteCard(dataList: React.MutableRefObject<TypeCard[]>, index: number) {
+    dataList.current.splice(index, 1);
+    closeInfoCardModal();
+  }
+
+  function closeInfoCardModal() {
+    setCardInfoModalOpen(false);
+    setModalInfoTitle('');
+    setModalInfoDesc('');
+    setCurrentIndex(null);
+    currentOpenCollumn.current = null;
+  }
 
   return (
     <div className="App">
@@ -144,6 +151,7 @@ function closeInfoCardModal() {
         setTitle={setModalInfoTitle}
         setDescr={setModalInfoDesc}
         saveChanges={(title: string, description: string) => saveChangesCard(currentOpenCollumn, title, description, currentIndex)}
+        deleteCard={() => deleteCard(currentOpenCollumn, currentIndex)}
       />
     </div>
   );

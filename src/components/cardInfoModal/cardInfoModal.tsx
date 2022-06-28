@@ -1,4 +1,4 @@
-import { Box, Button, Modal, SxProps, TextField } from "@mui/material";
+import { Box, Button, Modal, SxProps, TextField, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 
@@ -10,6 +10,7 @@ type TProps = {
     setTitle: React.Dispatch<React.SetStateAction<string>>
     setDescr: React.Dispatch<React.SetStateAction<string>>
     saveChanges: (title: string, description: string) => void
+    deleteCard: () => void
 }
 
 // const style: SxProps = {
@@ -57,8 +58,17 @@ export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
         props.saveChanges(title, descr)
     }
 
-    function closeQuestModal() {
+    function openQuestModal() {
+        setDeleteQuestModalOpen(true);
+    }
 
+    function closeQuestModal() {
+        setDeleteQuestModalOpen(false);
+    }
+
+    function onDelete() {
+        closeQuestModal();
+        props.deleteCard();
     }
 
     return <div className="card-info-modal">
@@ -73,6 +83,7 @@ export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
                     variant="contained"
                     sx={{marginLeft: 'auto'}}
                     size={'small'}
+                    onClick={() => openQuestModal()}
                 >
                     Delete card
                 </Button>
@@ -113,8 +124,33 @@ export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
         <Modal
             open={deleteQuestModalOpen}
             onClose={() => closeQuestModal()}
+            sx={{display:'flex', alignItems: 'center', justifyContent: 'center'}}
         >
-            <Box></Box>
+            <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2" textAlign={"center"}>
+                    Do you want to remove this card?
+                </Typography>
+                <Box sx={{marginLeft: 'auto'}}>
+                    <Button
+                        color="success"
+                        variant="text"
+                        // sx={{marginLeft: 'auto'}}
+                        size={'small'}
+                        onClick={() => closeQuestModal()}
+                    >
+                        No
+                    </Button>
+                    <Button
+                        color="error"
+                        variant="text"
+                        // sx={{marginLeft: 'auto'}}
+                        size={'small'}
+                        onClick={() => onDelete()}
+                    >
+                        Yes
+                    </Button>
+                </Box>        
+            </Box>
         </Modal>
     </div>
 })

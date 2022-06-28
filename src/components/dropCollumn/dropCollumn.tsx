@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, CardHeader } from "@mui/material";
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { TypeCard } from "../../types/card";
@@ -47,7 +47,7 @@ export const DropCollumn:React.FC<TProps> = (props) => {
         props.moveCard(dragInd, hoverInd, props.colRef);
     }
    
-    return <div className="drop-collumn" ref={dropRef} style={canDrop && isOver ? {backgroundColor: 'lightgreen'} : {}}>
+    return <div className="drop-collumn" ref={dropRef} style={canDrop && isOver ? {backgroundColor: 'lightgreen'} : {}}>        
         <div className="drop-collumn-header">
             <span className="drop-collumn-header-title">Title</span>
         </div>
