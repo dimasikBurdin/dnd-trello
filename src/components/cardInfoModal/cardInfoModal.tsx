@@ -54,21 +54,25 @@ export const CardInfoModal:React.FC<TProps> = React.memo((props) => {
                     color="error"
                     variant="contained"
                     sx={{marginLeft: 'auto'}}
+                    size={'small'}
                 >
                     Delete card
                 </Button>
                 <TextField 
                     label='Title'
                     value={props.title}
+                    size={'small'}
                 />
                 <TextField 
                     label='Description'
                     value={props.description}
+                    size={'small'}
                 />
                 <Button
                     color="success"
                     variant="text"
                     sx={{marginLeft: 'auto'}}
+                    size={'small'}
                 >
                     Save changes
                 </Button>
