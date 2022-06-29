@@ -11,16 +11,17 @@ import { Button } from '@mui/material';
 
 function App() {
   const init = [
-    useRef(Array<TypeCard>()),
-    useRef(Array<TypeCard>()),
-    useRef(Array<TypeCard>()),
+    Array<TypeCard>(),
+    Array<TypeCard>(),
+    Array<TypeCard>(),
+    
     // useRef(Array<TypeCard>())
   ]
-  const [collumns, setCollumns] = useState<Array<React.MutableRefObject<TypeCard[]>>>(init);
-  const removeCardInfo = useRef<{card: TypeCard, ind: number, dataList: React.MutableRefObject<TypeCard[]>}>();
+  const [collumns, setCollumns] = useState<Array<TypeCard[]>>(init);
+  const removeCardInfo = useRef<{card: TypeCard, ind: number, dataList: TypeCard[]}>();
   const [help, setHelp] = useState(0);
   const [modalCreateOpen, setModalCreateOpen] = useState(false);
-  const [collumnForCreate, setCollumnForCreate] = useState<React.MutableRefObject<TypeCard[]>>();
+  const [collumnForCreate, setCollumnForCreate] = useState<TypeCard[]>();
   const [cardInfoModalOpen, setCardInfoModalOpen] = useState(false);
 
   const [modalCreateTitle, setModalCreateTitle] = useState<string>('');
@@ -32,9 +33,9 @@ function App() {
   const currentOpenCollumn = useRef<Array<TypeCard>>();
   const [currentIndex, setCurrentIndex] = useState<number>(null);
   
-  function onDropped(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) {
-    card.index = dataList.current.length
-    dataList.current = [...dataList.current, card];
+  function onDropped(card: TypeCard, dataList: TypeCard[]) {
+    card.index = dataList.length
+    dataList= [...dataList, card];
     console.log('add card');
   }
 
@@ -47,19 +48,23 @@ function App() {
     console.log('remove this card');
     let dataList = removeCardInfo?.current.dataList;
     let index = removeCardInfo?.current.ind;    
-    dataList?.current?.splice(index, 1)
+    dataList?.splice(index, 1)
   }
 
-  function addCard(dataList: React.MutableRefObject<TypeCard[]>) {
+  function addCard(dataList: TypeCard[]) {
     let newCard: TypeCard = {
       title: modalCreateTitle,
       description: modalCreateDesc,
-      index: dataList.current.length
+      index: dataList.length
     };
 
-    console.log(newCard.index)
+    let index = collumns.indexOf(dataList);
+    dataList = [...dataList, newCard];    
+    console.log(index)
+    let tempCol = [...collumns];
+    tempCol[index] = [...dataList];
 
-    dataList.current = [...dataList.current, newCard];
+    setCollumns(tempCol)
     
     setHelp(help+1)
     setCollumnForCreate(null);
@@ -76,7 +81,7 @@ function App() {
     setHelp(help+1)
   }
 
-  function onClickCreateCard(dataList: React.MutableRefObject<TypeCard[]>) {
+  function onClickCreateCard(dataList: TypeCard[]) {
     setModalCreateOpen(true);
     setCollumnForCreate(dataList);
   }
@@ -130,7 +135,7 @@ function App() {
         <div className='board-container'>
           {collumns.map((collumn, i) => {
             return <DropCollumn 
-              key={collumn.current.toString()+i}
+              key={collumn.toString()+i}
               onDropped={onDropped}
               removeCard={removeCard}
               colRef={collumn}

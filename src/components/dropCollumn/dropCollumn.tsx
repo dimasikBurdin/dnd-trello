@@ -6,15 +6,15 @@ import { Card } from "../card/card";
 import './drop.css';
 
 type TProps = {
-    onDropped: (card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>) => void
-    addCard: (dataList: React.MutableRefObject<TypeCard[]>) => void
+    onDropped: (card: TypeCard, dataList: TypeCard[]) => void
+    addCard: (dataList:TypeCard[]) => void
     moveCard: Function
     removeCard: (card: TypeCard, index: number, dataList: React.MutableRefObject<TypeCard[]>) => void
-    colRef: React.MutableRefObject<TypeCard[]>
+    colRef: TypeCard[]
     setRemoveCardInfo: React.MutableRefObject<{
         card: TypeCard;
         ind: number;
-        dataList: React.MutableRefObject<TypeCard[]>;
+        dataList: TypeCard[];
     }>
     newRemoveCard: Function
     onClickCard: Function
@@ -39,11 +39,11 @@ export const DropCollumn:React.FC<TProps> = (props) => {
         })
     )
 
-    function removeCard(card: TypeCard, ind: number, dataList: React.MutableRefObject<TypeCard[]>) {        
+    function removeCard(card: TypeCard, ind: number, dataList: TypeCard[]) {        
         props.setRemoveCardInfo.current = {card: card, ind: ind, dataList: dataList};
     }
 
-    function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<TypeCard[]>) {
+    function moveCard(dragInd: number, hoverInd: number, dataList: TypeCard[]) {
         props.moveCard(dragInd, hoverInd, props.colRef);
     }
    
@@ -57,7 +57,7 @@ export const DropCollumn:React.FC<TProps> = (props) => {
             : ''
         }
         <div className="drop-collumn-cards-container">
-            {props.colRef.current.map((card, i) => {
+            {props.colRef.map((card, i) => {
                 return <Card 
                     key={card.title+i} 
                     removeCard={() => removeCard(card, i, props.colRef)}
