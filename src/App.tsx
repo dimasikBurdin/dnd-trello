@@ -17,7 +17,7 @@ function App() {
     
     // useRef(Array<TypeCard>())
   ]
-  const [collumns, setCollumns] = useState<Array<TypeCard[]>>(init);
+  const [collumns, setCollumns] = useState<Array<TypeCard[]>>();
   const removeCardInfo = useRef<{card: TypeCard, cardIndex: number, dataList: TypeCard[], collumnIndex: number}>();
   const [modalCreateOpen, setModalCreateOpen] = useState(false);
   const [collumnIndexForCreate, setCollumnIndexForCreate] = useState<number>();
@@ -47,17 +47,6 @@ function App() {
     let temp = [...collumns];
     temp[collumnIndex].splice(cardIndex, 1);
     setCollumns(temp);  
-  }
-
-  function findIndexArray(data: TypeCard[]) {
-    let ind = 0;
-    for(let collumn of collumns) {
-      if(JSON.stringify(collumn) === JSON.stringify(data)) {
-        return ind;
-      }
-      ind++;
-    }
-    return -1;
   }
 
   function addCard(collumnIndex: number) {
@@ -136,15 +125,21 @@ function App() {
     currentOpenIndexCollumn.current = null;
   }
 
-  function createCollumn() {    
-    setCollumns([...collumns, Array<TypeCard>()]);
+  function createCollumn() {
+    if(collumns) {
+      let temp = collumns.slice();
+      temp.push(Array<TypeCard>());
+      setCollumns(temp);
+    } else {
+      setCollumns([Array<TypeCard>()]);
+    }   
   }
 
   return (
     <div className="App">
       <DndProvider backend={HTML5Backend}>        
         <div className='board-container'>
-          {collumns.map((collumn, i) => {
+          {collumns?.map((collumn, i) => {
             return <DropCollumn 
               key={collumn.toString()+i}
               onDropped={onDropped}
