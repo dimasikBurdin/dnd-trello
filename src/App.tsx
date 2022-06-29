@@ -29,8 +29,8 @@ function App() {
   const [modalInfoTitle, setModalInfoTitle] = useState<string>('');
   const [modalInfoDesc, setModalInfoDesc] = useState<string>('');
 
-  const currentOpenCollumn = useRef<Array<TypeCard>>();
-  const [currentIndex, setCurrentIndex] = useState<number>(null);
+  const currentOpenIndexCollumn = useRef<number>();
+  const [currentOpenIndexCard, setCurrentOpenIndexCard] = useState<number>(null);
   
   function onDropped(card: TypeCard, collumnIndex: number) {
     // card.index = dataList.length
@@ -103,23 +103,28 @@ function App() {
     setModalCreateDesc('');
   }
 
-  function openCardInfo(card: TypeCard, dataList: React.MutableRefObject<TypeCard[]>, index: number) {  
+  function openCardInfo(card: TypeCard, cardIndex: number, collumnIndex: number) {  
     setModalInfoTitle(card.title);
     setModalInfoDesc(card.description);
     setCardInfoModalOpen(true);
-    setCurrentIndex(index);
-    currentOpenCollumn.current = dataList.current;
+
+    setCurrentOpenIndexCard(cardIndex);
+    currentOpenIndexCollumn.current = collumnIndex;
   }
 
-  function saveChangesCard(dataList: React.MutableRefObject<TypeCard[]>, title: string, description: string, index: number) {
-    dataList.current[index].title = title;
-    dataList.current[index].description = description;
+  function saveChangesCard(collumnindex: number, title: string, description: string, cardIndex: number) {
+    let temp = [...collumns];
+    temp[collumnindex][cardIndex].title = title;
+    temp[collumnindex][cardIndex].description = description;
+    setCollumns(temp);
     
     closeInfoCardModal();
   }
 
-  function deleteCard(dataList: React.MutableRefObject<TypeCard[]>, index: number) {
-    dataList.current.splice(index, 1);
+  function deleteCard(collumnIndex: number, cardIndex: number) {
+    let temp = [...collumns];
+    temp[collumnIndex].splice(cardIndex, 1);
+    setCollumns(temp);
     closeInfoCardModal();
   }
 
@@ -127,8 +132,8 @@ function App() {
     setCardInfoModalOpen(false);
     setModalInfoTitle('');
     setModalInfoDesc('');
-    setCurrentIndex(null);
-    currentOpenCollumn.current = null;
+    setCurrentOpenIndexCard(null);
+    currentOpenIndexCollumn.current = null;
   }
 
   function createCollumn() {
@@ -185,8 +190,8 @@ function App() {
         description={modalInfoDesc}
         setTitle={setModalInfoTitle}
         setDescr={setModalInfoDesc}
-        saveChanges={(title: string, description: string) => saveChangesCard(currentOpenCollumn, title, description, currentIndex)}
-        deleteCard={() => deleteCard(currentOpenCollumn, currentIndex)}
+        saveChanges={(title: string, description: string) => saveChangesCard(currentOpenIndexCollumn.current, title, description, currentOpenIndexCard)}
+        deleteCard={() => deleteCard(currentOpenIndexCollumn.current, currentOpenIndexCard)}
       />
     </div>
   );

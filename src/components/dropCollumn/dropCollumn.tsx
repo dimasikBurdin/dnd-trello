@@ -17,7 +17,7 @@ type TProps = {
         collumnIndex: number;
     }>
     removeCard: (collumnIndex: number, cardIndex: number) => void
-    onClickCard: Function
+    onClickCard: (card:TypeCard, cardIndex: number, collumnIndex: number) => void
     collumnIndex: number
 }
 
@@ -64,7 +64,7 @@ export const DropCollumn:React.FC<TProps> = React.memo((props) => {
                     removeCard={() => removeCard(card, i, props.thisCollumn, props.collumnIndex)}
                     moveCard={(dragInd: number, hoverInd: number) => moveCard(dragInd, hoverInd, props.thisCollumn)}
                     cardInfo={{...card, index:i}}
-                    onClickCard={() => props.onClickCard(card, props.thisCollumn, i)}
+                    onClickCard={() => props.onClickCard(card, i, props.collumnIndex)}
                 />
             })}
         </div>
