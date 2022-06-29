@@ -94,7 +94,7 @@ export const Card:React.FC<TProps> = (props) => {
           <span className="card-title">{props.cardInfo.title}</span>
         </div>      
         <span className="card-description">{props.cardInfo.description}</span>
-        <span style={{color: 'red'}}>{props.cardInfo.index}</span>
+        {/* <span style={{color: 'red'}}>{props.cardInfo.index}</span> */}
     </div>
     </Paper>
     

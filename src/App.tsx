@@ -136,12 +136,8 @@ function App() {
     currentOpenIndexCollumn.current = null;
   }
 
-  function createCollumn() {
-    // let a = useRef<TypeCard[]>();
-    // a.current = Array<TypeCard>();
-    // let a = React.createRef<TypeCard[] | null>();
-    // a.current = []
-    // setCollumns([...collumns, a])
+  function createCollumn() {    
+    setCollumns([...collumns, Array<TypeCard>()]);
   }
 
   return (
