@@ -34,17 +34,12 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState<number>(null);
   
   function onDropped(card: TypeCard, dataList: TypeCard[]) {
-    card.index = dataList.length
+    // card.index = dataList.length
     dataList= [...dataList, card];
     console.log('add card');
   }
 
-  function removeCard(card: TypeCard, index: number, dataList: React.MutableRefObject<TypeCard[]>) {
-    console.log('remove this card')
-    dataList.current?.splice(index, 1)
-  }
-
-  function newRemoveCard() {
+  function removeCardFromCollumnForMove() {
     console.log('remove this card');
     let dataList = removeCardInfo?.current.dataList;
     let index = removeCardInfo?.current.ind;    
@@ -71,14 +66,18 @@ function App() {
     closeCreateModal();
   }
 
-  function moveCard(dragInd: number, hoverInd: number, dataList: React.MutableRefObject<TypeCard[]>) {
+  function moveCard(dragInd: number, hoverInd: number, dataList: TypeCard[]) {
     console.log(dragInd, hoverInd);
-    let collumn = dataList.current;
-    let moveCard = collumn[dragInd];
-    collumn.splice(dragInd, 1);
-    collumn.splice(hoverInd, 0, moveCard);
-    dataList.current = [...collumn];
-    setHelp(help+1)
+    let currentCollumn = [...dataList];
+    let moveCard = currentCollumn[dragInd];
+    currentCollumn.splice(dragInd, 1);
+    currentCollumn.splice(hoverInd, 0, moveCard);
+    // dataList = [...collumn];
+    let index = collumns.indexOf(dataList);
+    let temp = [...collumns]
+    temp[index] = [...currentCollumn]
+    setCollumns(temp);
+    // setHelp(help+1)
   }
 
   function onClickCreateCard(dataList: TypeCard[]) {
@@ -137,10 +136,9 @@ function App() {
             return <DropCollumn 
               key={collumn.toString()+i}
               onDropped={onDropped}
-              removeCard={removeCard}
               colRef={collumn}
               setRemoveCardInfo={removeCardInfo}
-              newRemoveCard={newRemoveCard}
+              removeCard={removeCardFromCollumnForMove}
               addCard={onClickCreateCard}
               moveCard={moveCard}
               onClickCard={openCardInfo}

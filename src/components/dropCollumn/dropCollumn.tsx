@@ -9,14 +9,13 @@ type TProps = {
     onDropped: (card: TypeCard, dataList: TypeCard[]) => void
     addCard: (dataList:TypeCard[]) => void
     moveCard: Function
-    removeCard: (card: TypeCard, index: number, dataList: React.MutableRefObject<TypeCard[]>) => void
     colRef: TypeCard[]
     setRemoveCardInfo: React.MutableRefObject<{
         card: TypeCard;
         ind: number;
         dataList: TypeCard[];
     }>
-    newRemoveCard: Function
+    removeCard: Function
     onClickCard: Function
 }
 
@@ -28,7 +27,7 @@ export const DropCollumn:React.FC<TProps> = (props) => {
             drop: (e: TypeCard) => {                
                 if(props.colRef !== props.setRemoveCardInfo.current.dataList) {
                     props.onDropped(e, props.colRef);
-                    props.newRemoveCard();
+                    props.removeCard();
                 }                
             },
 
