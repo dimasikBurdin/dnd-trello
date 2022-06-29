@@ -7,19 +7,20 @@ import { DropCollumn } from './components/dropCollumn/dropCollumn';
 import { CreateModal } from './components/createModal/createModal';
 import { TypeCard } from './types/card';
 import { CardInfoModal } from './components/cardInfoModal/cardInfoModal';
+import { Button } from '@mui/material';
 
 function App() {
   const init = [
     useRef(Array<TypeCard>()),
     useRef(Array<TypeCard>()),
     useRef(Array<TypeCard>()),
-    useRef(Array<TypeCard>())
+    // useRef(Array<TypeCard>())
   ]
   const [collumns, setCollumns] = useState<Array<React.MutableRefObject<TypeCard[]>>>(init);
   const removeCardInfo = useRef<{card: TypeCard, ind: number, dataList: React.MutableRefObject<TypeCard[]>}>();
   const [help, setHelp] = useState(0);
   const [modalCreateOpen, setModalCreateOpen] = useState(false);
-  const [createCollumn, setCreateCollumn] = useState<React.MutableRefObject<TypeCard[]>>();
+  const [collumnForCreate, setCollumnForCreate] = useState<React.MutableRefObject<TypeCard[]>>();
   const [cardInfoModalOpen, setCardInfoModalOpen] = useState(false);
 
   const [modalCreateTitle, setModalCreateTitle] = useState<string>('');
@@ -61,7 +62,7 @@ function App() {
     dataList.current = [...dataList.current, newCard];
     
     setHelp(help+1)
-    setCreateCollumn(null);
+    setCollumnForCreate(null);
     closeCreateModal();
   }
 
@@ -77,12 +78,12 @@ function App() {
 
   function onClickCreateCard(dataList: React.MutableRefObject<TypeCard[]>) {
     setModalCreateOpen(true);
-    setCreateCollumn(dataList);
+    setCollumnForCreate(dataList);
   }
 
   function closeCreateModal() {
     setModalCreateOpen(false);
-    setCreateCollumn(null);
+    setCollumnForCreate(null);
     setModalCreateTitle('');
     setModalCreateDesc('');
   }
@@ -115,6 +116,14 @@ function App() {
     currentOpenCollumn.current = null;
   }
 
+  function createCollumn() {
+    // let a = useRef<TypeCard[]>();
+    // a.current = Array<TypeCard>();
+    // let a = React.createRef<TypeCard[] | null>();
+    // a.current = []
+    // setCollumns([...collumns, a])
+  }
+
   return (
     <div className="App">
       <DndProvider backend={HTML5Backend}>        
@@ -131,13 +140,23 @@ function App() {
               moveCard={moveCard}
               onClickCard={openCardInfo}
             />
-          })}          
+          })}
+          <Button
+            variant="contained"
+            color="inherit"
+            size="small"
+            sx={{fontSize: '18px'}}
+            onClick={() => createCollumn()}
+        >
+            +
+        </Button>
         </div>
+        
       </DndProvider>
       <CreateModal 
         isOpen={modalCreateOpen}
         close={closeCreateModal}
-        onCreateCard={() => addCard(createCollumn)}
+        onCreateCard={() => addCard(collumnForCreate)}
         onCancelCreate={closeCreateModal}
         descrValue={modalCreateDesc}
         titleValue={modalCreateTitle}
