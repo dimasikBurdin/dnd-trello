@@ -6,28 +6,30 @@ import { Card } from "../card/card";
 import './drop.css';
 
 type TProps = {
-    onDropped: (card: TypeCard, dataList: TypeCard[]) => void
-    addCard: (dataList:TypeCard[]) => void
+    onDropped: (card: TypeCard, collumnIndex: number) => void
+    addCard: (collumnIndex: number) => void
     moveCard: Function
-    colRef: TypeCard[]
-    setRemoveCardInfo: React.MutableRefObject<{
+    thisCollumn: TypeCard[]    
+    removeCardInfo: React.MutableRefObject<{
         card: TypeCard;
-        ind: number;
+        cardIndex: number;
         dataList: TypeCard[];
+        collumnIndex: number;
     }>
-    removeCard: Function
+    removeCard: (collumnIndex: number, cardIndex: number) => void
     onClickCard: Function
+    collumnIndex: number
 }
 
-export const DropCollumn:React.FC<TProps> = (props) => {
-    const [removeCardInfo, setRemoveCardInfo] = useState<{card: string, ind: number, dataList: React.MutableRefObject<TypeCard[]>}>();
-        
+export const DropCollumn:React.FC<TProps> = React.memo((props) => {
     const [{ isOver, canDrop}, dropRef] = useDrop(() => ({
             accept: 'card',            
-            drop: (e: TypeCard) => {                
-                if(props.colRef !== props.setRemoveCardInfo.current.dataList) {
-                    props.onDropped(e, props.colRef);
-                    props.removeCard();
+            drop: (e: TypeCard) => {
+                console.log(props.collumnIndex)
+                console.log(props.removeCardInfo.current.collumnIndex)
+                if(props.collumnIndex !== props.removeCardInfo.current.collumnIndex) {                                        
+                    props.onDropped(e, props.collumnIndex);
+                    props.removeCard(props.removeCardInfo.current.collumnIndex, props.removeCardInfo.current.cardIndex);
                 }                
             },
 
@@ -38,12 +40,12 @@ export const DropCollumn:React.FC<TProps> = (props) => {
         })
     )
 
-    function removeCard(card: TypeCard, ind: number, dataList: TypeCard[]) {        
-        props.setRemoveCardInfo.current = {card: card, ind: ind, dataList: dataList};
+    function removeCard(card: TypeCard, cardIndex: number, dataList: TypeCard[], collumnIndex: number) {
+        props.removeCardInfo.current = {card: card, cardIndex: cardIndex, dataList: dataList, collumnIndex: collumnIndex};
     }
 
     function moveCard(dragInd: number, hoverInd: number, dataList: TypeCard[]) {
-        props.moveCard(dragInd, hoverInd, props.colRef);
+        props.moveCard(dragInd, hoverInd, dataList);
     }
    
     return <div className="drop-collumn" ref={dropRef} style={canDrop && isOver ? {backgroundColor: 'lightgreen'} : {}}>        
@@ -56,13 +58,13 @@ export const DropCollumn:React.FC<TProps> = (props) => {
             : ''
         }
         <div className="drop-collumn-cards-container">
-            {props.colRef.map((card, i) => {
+            {props.thisCollumn.map((card, i) => {
                 return <Card 
                     key={card.title+i} 
-                    removeCard={() => removeCard(card, i, props.colRef)}
-                    moveCard={(dragInd: number, hoverInd: number) => moveCard(dragInd, hoverInd, props.colRef)}
+                    removeCard={() => removeCard(card, i, props.thisCollumn, props.collumnIndex)}
+                    moveCard={(dragInd: number, hoverInd: number) => moveCard(dragInd, hoverInd, props.thisCollumn)}
                     cardInfo={{...card, index:i}}
-                    onClickCard={() => props.onClickCard(card, props.colRef, i)}
+                    onClickCard={() => props.onClickCard(card, props.thisCollumn, i)}
                 />
             })}
         </div>
@@ -71,9 +73,9 @@ export const DropCollumn:React.FC<TProps> = (props) => {
             color="inherit"
             size="small"
             sx={{fontSize: '18px'}}
-            onClick={() => props.addCard(props.colRef)}
+            onClick={() => props.addCard(props.collumnIndex)}
         >
             +
         </Button>        
     </div>
-}
+})

@@ -18,10 +18,9 @@ function App() {
     // useRef(Array<TypeCard>())
   ]
   const [collumns, setCollumns] = useState<Array<TypeCard[]>>(init);
-  const removeCardInfo = useRef<{card: TypeCard, ind: number, dataList: TypeCard[]}>();
-  const [help, setHelp] = useState(0);
+  const removeCardInfo = useRef<{card: TypeCard, cardIndex: number, dataList: TypeCard[], collumnIndex: number}>();
   const [modalCreateOpen, setModalCreateOpen] = useState(false);
-  const [collumnForCreate, setCollumnForCreate] = useState<TypeCard[]>();
+  const [collumnIndexForCreate, setCollumnIndexForCreate] = useState<number>();
   const [cardInfoModalOpen, setCardInfoModalOpen] = useState(false);
 
   const [modalCreateTitle, setModalCreateTitle] = useState<string>('');
@@ -33,61 +32,73 @@ function App() {
   const currentOpenCollumn = useRef<Array<TypeCard>>();
   const [currentIndex, setCurrentIndex] = useState<number>(null);
   
-  function onDropped(card: TypeCard, dataList: TypeCard[]) {
+  function onDropped(card: TypeCard, collumnIndex: number) {
     // card.index = dataList.length
-    dataList= [...dataList, card];
-    console.log('add card');
+    let temp = [...collumns];
+    temp[collumnIndex].push(card);
+    setCollumns(temp);
+    console.log('on dropped');
   }
 
-  function removeCardFromCollumnForMove() {
-    console.log('remove this card');
-    let dataList = removeCardInfo?.current.dataList;
-    let index = removeCardInfo?.current.ind;    
-    dataList?.splice(index, 1)
+  function removeCardFromCollumnForMove(collumnIndex: number, cardIndex: number) {
+    console.log('remove card from this collumn');
+    // let index = collumns.indexOf(removeInfo.dataList);
+    
+    let temp = [...collumns];
+    temp[collumnIndex].splice(cardIndex, 1);
+    setCollumns(temp);  
   }
 
-  function addCard(dataList: TypeCard[]) {
+  function findIndexArray(data: TypeCard[]) {
+    let ind = 0;
+    for(let collumn of collumns) {
+      if(JSON.stringify(collumn) === JSON.stringify(data)) {
+        return ind;
+      }
+      ind++;
+    }
+    return -1;
+  }
+
+  function addCard(collumnIndex: number) {
     let newCard: TypeCard = {
       title: modalCreateTitle,
       description: modalCreateDesc,
-      index: dataList.length
+      index: 10
     };
 
-    let index = collumns.indexOf(dataList);
-    dataList = [...dataList, newCard];    
-    console.log(index)
     let tempCol = [...collumns];
-    tempCol[index] = [...dataList];
+    tempCol[collumnIndex].push(newCard);
 
     setCollumns(tempCol)
     
-    setHelp(help+1)
-    setCollumnForCreate(null);
+    setCollumnIndexForCreate(null);
     closeCreateModal();
+
+    console.log('create new card')
   }
 
   function moveCard(dragInd: number, hoverInd: number, dataList: TypeCard[]) {
-    console.log(dragInd, hoverInd);
+    // console.log(dragInd, hoverInd, 'on move card');
     let currentCollumn = [...dataList];
     let moveCard = currentCollumn[dragInd];
     currentCollumn.splice(dragInd, 1);
     currentCollumn.splice(hoverInd, 0, moveCard);
-    // dataList = [...collumn];
     let index = collumns.indexOf(dataList);
     let temp = [...collumns]
     temp[index] = [...currentCollumn]
     setCollumns(temp);
-    // setHelp(help+1)
+    // console.log('move')
   }
 
-  function onClickCreateCard(dataList: TypeCard[]) {
+  function onClickCreateCard(collumnIndex: number) {
     setModalCreateOpen(true);
-    setCollumnForCreate(dataList);
+    setCollumnIndexForCreate(collumnIndex);
   }
 
   function closeCreateModal() {
     setModalCreateOpen(false);
-    setCollumnForCreate(null);
+    setCollumnIndexForCreate(null);
     setModalCreateTitle('');
     setModalCreateDesc('');
   }
@@ -136,12 +147,13 @@ function App() {
             return <DropCollumn 
               key={collumn.toString()+i}
               onDropped={onDropped}
-              colRef={collumn}
-              setRemoveCardInfo={removeCardInfo}
+              thisCollumn={collumn}
+              removeCardInfo={removeCardInfo}
               removeCard={removeCardFromCollumnForMove}
               addCard={onClickCreateCard}
               moveCard={moveCard}
               onClickCard={openCardInfo}
+              collumnIndex={i}
             />
           })}
           <Button
@@ -159,7 +171,7 @@ function App() {
       <CreateModal 
         isOpen={modalCreateOpen}
         close={closeCreateModal}
-        onCreateCard={() => addCard(collumnForCreate)}
+        onCreateCard={() => addCard(collumnIndexForCreate)}
         onCancelCreate={closeCreateModal}
         descrValue={modalCreateDesc}
         titleValue={modalCreateTitle}

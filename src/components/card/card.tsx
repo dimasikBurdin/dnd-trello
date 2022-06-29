@@ -7,7 +7,7 @@ import { Paper } from "@mui/material";
 
 type TProps = {
     cardInfo: TypeCard
-    removeCard?: Function
+    removeCard: Function
     moveCard: Function
     onClickCard: Function
 }
@@ -24,8 +24,7 @@ export const Card:React.FC<TProps> = (props) => {
           type: 'card',          
           item() {
             // console.log('start drag', props.value);
-            if(props.removeCard)
-              props.removeCard();            
+            props.removeCard();
             return props.cardInfo
           },
           
@@ -95,7 +94,7 @@ export const Card:React.FC<TProps> = (props) => {
           <span className="card-title">{props.cardInfo.title}</span>
         </div>      
         <span className="card-description">{props.cardInfo.description}</span>
-        {/* <span style={{color: 'red'}}>{props.cardInfo.index}</span> */}
+        <span style={{color: 'red'}}>{props.cardInfo.index}</span>
     </div>
     </Paper>
     
