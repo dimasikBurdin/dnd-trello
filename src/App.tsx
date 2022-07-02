@@ -119,10 +119,11 @@ function App() {
   }
 
   function saveChangesCard(collumnindex: number, title: string, description: string, cardIndex: number) {
-    let temp = [...collumns];
+    let temp = JSON.parse(JSON.stringify(backUpCollumns.current)) as Array<TypeCard[]>;
     temp[collumnindex][cardIndex].title = title;
     temp[collumnindex][cardIndex].description = description;
-    setCollumns(temp);
+    backUpCollumns.current = JSON.parse(JSON.stringify(temp)) as Array<TypeCard[]>
+    setCollumns(backUpCollumns.current);
     
     closeInfoCardModal();
   }
