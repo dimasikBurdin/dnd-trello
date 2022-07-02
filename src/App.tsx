@@ -10,14 +10,15 @@ import { CardInfoModal } from './components/cardInfoModal/cardInfoModal';
 import { Button } from '@mui/material';
 
 function App() {
-  const init = [
-    Array<TypeCard>(),
-    Array<TypeCard>(),
-    Array<TypeCard>(),
+  const init: Array<TypeCard[]> = [
+    // Array<TypeCard>(),
+    // Array<TypeCard>(),
+    // Array<TypeCard>(),
     
     // useRef(Array<TypeCard>())
   ]
-  const [collumns, setCollumns] = useState<Array<TypeCard[]>>();
+  const [collumns, setCollumns] = useState<Array<TypeCard[]>>([]);
+  const backUpCollumns = useRef<Array<TypeCard[]>>();
   const removeCardInfo = useRef<{card: TypeCard, cardIndex: number, dataList: TypeCard[], collumnIndex: number}>();
   const [modalCreateOpen, setModalCreateOpen] = useState(false);
   const [collumnIndexForCreate, setCollumnIndexForCreate] = useState<number>();
@@ -33,20 +34,29 @@ function App() {
   const [currentOpenIndexCard, setCurrentOpenIndexCard] = useState<number>(null);
   
   function onDropped(card: TypeCard, collumnIndex: number) {
-    // card.index = dataList.length
-    let temp = [...collumns];
+    // let temp = [...[...collumns]];
+    let temp = JSON.parse(JSON.stringify(backUpCollumns.current)) as Array<TypeCard[]>;
+    // let temp = collumns.slice();
     temp[collumnIndex].push(card);
-    setCollumns(temp);
+    // console.log(collumns)
+    // console.log(temp)
+    backUpCollumns.current = temp.slice();
+    setCollumns(backUpCollumns.current);
     console.log('on dropped');
   }
 
+  useEffect(() => {
+    console.log(collumns)
+  }, [collumns])
+
   function removeCardFromCollumnForMove(collumnIndex: number, cardIndex: number) {
     console.log('remove card from this collumn');
-    // let index = collumns.indexOf(removeInfo.dataList);
-    
-    let temp = [...collumns];
+    console.log(collumns)
+    // let temp = [...[...collumns]];
+    let temp = JSON.parse(JSON.stringify(backUpCollumns.current)) as Array<TypeCard[]>;
     temp[collumnIndex].splice(cardIndex, 1);
-    setCollumns(temp);  
+    backUpCollumns.current = temp.slice();
+    setCollumns(backUpCollumns.current);  
   }
 
   function addCard(collumnIndex: number) {
@@ -56,10 +66,12 @@ function App() {
       index: 10
     };
 
-    let tempCol = [...collumns];
+    // let tempCol = [...collumns];
+    let tempCol = JSON.parse(JSON.stringify(backUpCollumns.current)) as Array<TypeCard[]>;
     tempCol[collumnIndex].push(newCard);
 
-    setCollumns(tempCol)
+    backUpCollumns.current = tempCol.slice();
+    setCollumns(backUpCollumns.current);    
     
     setCollumnIndexForCreate(null);
     closeCreateModal();
@@ -67,17 +79,22 @@ function App() {
     console.log('create new card')
   }
 
-  function moveCard(dragInd: number, hoverInd: number, dataList: TypeCard[]) {
-    // console.log(dragInd, hoverInd, 'on move card');
+  function moveCard(dragInd: number, hoverInd: number, dataList: TypeCard[], collumnIndex: number) {
+    console.log(dragInd, hoverInd, 'on move card');
     let currentCollumn = [...dataList];
     let moveCard = currentCollumn[dragInd];
     currentCollumn.splice(dragInd, 1);
     currentCollumn.splice(hoverInd, 0, moveCard);
-    let index = collumns.indexOf(dataList);
-    let temp = [...collumns]
-    temp[index] = [...currentCollumn]
-    setCollumns(temp);
-    // console.log('move')
+    // let index = collumns.indexOf(dataList);
+    let index = collumnIndex;
+    // let temp = [...collumns]
+    // temp[index] = [...currentCollumn]
+
+    let tempCol = JSON.parse(JSON.stringify(backUpCollumns.current)) as Array<TypeCard[]>;
+    tempCol[index] = [...currentCollumn];
+    backUpCollumns.current = JSON.parse(JSON.stringify(tempCol));
+    setCollumns(backUpCollumns.current);
+    console.log('move')
   }
 
   function onClickCreateCard(collumnIndex: number) {
@@ -125,14 +142,18 @@ function App() {
     currentOpenIndexCollumn.current = null;
   }
 
-  function createCollumn() {
-    if(collumns) {
-      let temp = collumns.slice();
+  function createCollumn() {    
+    if(collumns.length) {
+      let temp = JSON.parse(JSON.stringify(backUpCollumns.current)) as Array<TypeCard[]>;
       temp.push(Array<TypeCard>());
-      setCollumns(temp);
+      backUpCollumns.current = temp.slice();
+      // setCollumns([...[...collumns], Array<TypeCard>()]);
+      setCollumns(backUpCollumns.current);
     } else {
-      setCollumns([Array<TypeCard>()]);
-    }   
+      backUpCollumns.current = [Array<TypeCard>()];
+      setCollumns(backUpCollumns.current)
+    }
+    
   }
 
   return (
@@ -141,7 +162,7 @@ function App() {
         <div className='board-container'>
           {collumns?.map((collumn, i) => {
             return <DropCollumn 
-              key={collumn.toString()+i}
+              key={i+'asd'}
               onDropped={onDropped}
               thisCollumn={collumn}
               removeCardInfo={removeCardInfo}
@@ -150,6 +171,7 @@ function App() {
               moveCard={moveCard}
               onClickCard={openCardInfo}
               collumnIndex={i}
+              collumns={collumns}
             />
           })}
           <Button

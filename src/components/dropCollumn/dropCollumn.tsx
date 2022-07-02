@@ -19,18 +19,20 @@ type TProps = {
     removeCard: (collumnIndex: number, cardIndex: number) => void
     onClickCard: (card:TypeCard, cardIndex: number, collumnIndex: number) => void
     collumnIndex: number
+    collumns: TypeCard[][]
 }
 
 export const DropCollumn:React.FC<TProps> = React.memo((props) => {
     const [{ isOver, canDrop}, dropRef] = useDrop(() => ({
             accept: 'card',            
             drop: (e: TypeCard) => {
+                console.log(props.collumns)
                 console.log(props.collumnIndex)
                 console.log(props.removeCardInfo.current.collumnIndex)
                 if(props.collumnIndex !== props.removeCardInfo.current.collumnIndex) {                                        
                     props.onDropped(e, props.collumnIndex);
                     props.removeCard(props.removeCardInfo.current.collumnIndex, props.removeCardInfo.current.cardIndex);
-                }                
+                }
             },
 
             collect: (monitor) => ({
@@ -44,25 +46,23 @@ export const DropCollumn:React.FC<TProps> = React.memo((props) => {
         props.removeCardInfo.current = {card: card, cardIndex: cardIndex, dataList: dataList, collumnIndex: collumnIndex};
     }
 
-    function moveCard(dragInd: number, hoverInd: number, dataList: TypeCard[]) {
-        props.moveCard(dragInd, hoverInd, dataList);
+    function moveCard(dragInd: number, hoverInd: number, dataList: TypeCard[], collumnIndex: number) {
+        props.moveCard(dragInd, hoverInd, dataList, collumnIndex);
     }
    
-    return <div className="drop-collumn" ref={dropRef} style={canDrop && isOver ? {backgroundColor: 'lightgreen'} : {}}>        
+    return <div className="drop-collumn" ref={dropRef} style={canDrop && isOver ? {backgroundColor: 'lightgreen'} : {}}>
         <div className="drop-collumn-header">
             <span className="drop-collumn-header-title">Title</span>
         </div>
         {
-            canDrop && isOver 
-            ? <span className="drop-text">drop on me</span>
-            : ''
+            canDrop && isOver && <span className="drop-text">drop on me</span>            
         }
         <div className="drop-collumn-cards-container">
             {props.thisCollumn.map((card, i) => {
                 return <Card 
                     key={card.title+i} 
                     removeCard={() => removeCard(card, i, props.thisCollumn, props.collumnIndex)}
-                    moveCard={(dragInd: number, hoverInd: number) => moveCard(dragInd, hoverInd, props.thisCollumn)}
+                    moveCard={(dragInd: number, hoverInd: number) => moveCard(dragInd, hoverInd, props.thisCollumn, props.collumnIndex)}
                     cardInfo={{...card, index:i}}
                     onClickCard={() => props.onClickCard(card, i, props.collumnIndex)}
                 />
